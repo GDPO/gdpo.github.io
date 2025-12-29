@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="GDPO: Group Diffusion Policy Optimization - Improving Reasoning for Diffusion Language
+Models">
+  <meta name="keywords" content="GDPO">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Group Diffusion Policy Optimization - Improving Reasoning for Diffusion Language Models</title>
+
+  <!-- MathJax for LaTeX rendering -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    
+  </script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Group Diffusion Policy Optimization - Improving Reasoning for Diffusion Language Models</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://kevinrojas1499.github.io">Kevin Rojas</a><sup>1,*</sup>,</span>
+            <span class="author-block">
+              Jiahe Lin<sup>2</sup>,</span>
+            <span class="author-block">
+              Kashif Rasul<sup>2</sup>,
+            </span>
+            <span class="author-block">
+              Anderson Schneider<sup>2</sup>,
+            </span>
+            <span class="author-block">
+              Yuriy Nevmyvaka<sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://https://mtao8.math.gatech.edu/">Molei Tao</a><sup>1,✝</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.weideng.org/">Wei Deng</a><sup>1,✝</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Georgia Institute of Technology</span>
+            <span class="author-block"><sup>2</sup>Morgan Stanley</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>*</sup> Work done while interning at Morgan Stanley</span>
+            <span class="author-block"><sup>✝</sup> Correspondence </span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2510.08554"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/kevinrojas1499/GDPO"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay controls muted loop playsinline width="100%">
+        <source src="./static/videos/gdpo-animation.mp4" type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf"> GDPO </span> improves reasoning for diffusion language models by leveraging efficient level likelihood approximations instead of token level likelihood approximations
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Introduction</h2>
+        <div class="content has-text-justified">
+          <p> There has been an ongoing effort to adapt reinforcement learning (RL) algorithms for LLMs to DLMs. Most works have considered extending GRPO by finding ways to approximate the token-level likelihoods. However, this approach often comes with significant biases or computational inefficiencies. A more principled foundation lies in sequence-level likelihoods, where the ELBO serves as a surrogate. Yet, despite this clean mathematical connection, ELBO-based methods have seen limited adoption due to the prohibitive cost of likelihood evaluation.<p>
+
+          </p> In this work, we present efficient ways to estimate the ELBO for DLMs and leverage it to improve reasoning for DLMs. We introduce Group Diffusion Policy Optimization (GDPO), a new RL algorithm tailored for DLMs that leverages these efficient ELBO approximations to improve reasoning for DLMs. Our work leads to new SOTA results in finetuning LLada!</p>
+        </div>
+      </div>
+    </div>
+    <div class="content has-text-centered">
+      <img src="./static/images/gdpo-results.png" width="80%"/>
+      <p>
+        GDPO achieves new SOTA results in finetuning LLada on a variety of reasoning tasks.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Efficient ELBO Approximations</h2> 
+    <div class="content has-text-justified">
+      The ELBO for DLMs can be written as;
+
+    $$
+    \mathbb{E}_{t\sim \mathcal{U}[0,1]} \mathbb{E}_{y_t \sim \pi_t(\cdot|y)} \left[ \frac{1}{t} \sum_{i = 1}^L \mathbf{1}[y_t^i = M] \log \pi_\theta(y^i|y_t, q)\right] \leq \log \pi(y|q),
+    $$
+    
+    This is usually approximated by a double monte carlo estimate. However, doing so leads to high variance, requiring many samples to get a good estimate. Our investigation reveals that most of the variance in approximating the ELBO comes from sampling in the time dimension.
+    <div class="content has-text-centered">
+      <img src="./static/images/loss-variance.png" width="80%"/>
+      <p>
+        Most of the variance in approximating the ELBO comes from the time dimension. The loss function also has a simple form making numerical Quadratures efficientto approximate the ELBO.
+      </p>
+    </div>
+
+    For this reason, we propose to approximate the ELBO as a time integral of a function instead of a double monte carlo estimate. This leads to efficient well grounded approximations by leveraging Gaussian Quadratures.
+
+    $$
+      \int_0^1 \mathbb{E}_{y_t \sim \pi_t(\cdot|y)} \left[ \frac{1}{t} \sum_{i = 1}^L \mathbf{1}[y_t^i = M] \log \pi_\theta(y^i|y_t, q)\right] dt \leq \log \pi(y|q),
+    $$
+
+    Notably, this leads to a provably lower-variance estimator!
+    </div>
+  </div>
+
+</section>
+<section class="section">
+
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Group Diffusion Policy Optimization (GDPO)</h2> 
+    <div class="content has-text-justified">
+          <p> To leverage our new efficient ELBO approximation we propose Group Diffusion Policy Optimization (GDPO) which modifies the GRPO objective to use ELBO surrogates instead of token-level likelihoods. Formally, the GDPO loss is defined as:
+$$
+\mathcal{L}^{\text{GDPO}}(\theta) = \mathbb{E}_{x}\mathbb{E}_{y_g \sim \pi_\theta^{\text{old}}} \left[ \frac{1}{G} \sum_{g=1}^G \frac{1}{|y_g|}\min\left( r_{g} A_g, \text{clip}(r_{g}, 1 - \epsilon, 1 + \epsilon) A_g \right) - \beta KL(\pi_\theta || \pi_{\text{ref}})\right] ,
+$$
+where the importance weights and advantage estimates are both done at the sequence level:
+$$
+r_{g}(x) = \frac{\mathcal{L}_{\text{ELBO}}(y_{g} |x)}{\mathcal{L}_{\text{ELBO}}^{\text{old}}(y_{g}|x)}, \quad
+    % A_g = \frac{R_g - \text{mean}(R_1, \dots, R_G)}{\text{std}(R_1, \dots, R_G)}.
+    A_g = R_g - \text{mean}(R_1, \dots, R_G).
+$$
+Here $\mathcal{L}_{\text{ELBO}}^{\text{old}}$ represents the ELBO evaluated under the old policy and $R_g = R(q,y_g)$, and we utilize unnormalized advantage estimates to avoid the bias of normalized advantage estimates.
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{rojas2025improving,
+  title={Improving Reasoning for Diffusion Language Models via Group Diffusion Policy Optimization},
+  author={Rojas, Kevin and Lin, Jiahe and Rasul, Kashif and Schneider, Anderson and Nevmyvaka, Yuriy and Tao, Molei and Deng, Wei},
+  journal={arXiv preprint arXiv:2510.08554},
+  year={2025}
+}
+</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This webpage is adapted from <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
